@@ -35,13 +35,18 @@
 
 // ################################################################################
 
-#define MASTER										  	// Select if firmware is for master or slave board
-//#define SLAVE 												// Select if firmware is for master or slave board
+// MASTER or SLAVE is normally selected via build flags (-DMASTER / -DSLAVE in platformio.ini)
+#if defined(MASTER) && defined(SLAVE)
+  #error "Define only one of MASTER or SLAVE"
+#endif
+#if !defined(MASTER) && !defined(SLAVE)
+  #define MASTER    // Fallback so the Keil project (which passes no defines) still builds as master
+#endif
 
 // ################################################################################
 
 #define PWM_FREQ         		16000     // PWM frequency in Hz
-#define DEAD_TIME        		60        // PWM deadtime (60 = 1µs, measured by oscilloscope)
+#define DEAD_TIME        		60        // PWM deadtime (60 = 1Âµs, measured by oscilloscope)
 
 #define DC_CUR_LIMIT     		15        // Motor DC current limit in amps
 
