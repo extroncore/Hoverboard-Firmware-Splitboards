@@ -255,16 +255,17 @@ void CheckUSARTBluetoothInput(uint8_t USARTBuffer[])
 void SendBluetoothDevice(uint8_t identifier, int16_t value)
 {
 	int index = 0;
-	char charVal[5];
+	char charVal[8];
 	uint8_t buffer[USART_BLUETOOTH_TX_BYTES];
-	
+
 	// Send bluetooth frame
 	buffer[index++] = '/';
 	sprintf(charVal, "%02d", identifier);
 	buffer[index++] = charVal[0];
 	buffer[index++] = charVal[1];
 	buffer[index++] = '0';
-	sprintf(charVal, "%05d", value);
+	// Format the absolute value (sign is sent separately below)
+	sprintf(charVal, "%05u", value < 0 ? (unsigned int)-(int32_t)value : (unsigned int)value);
 	buffer[index++] = value < 0 ? '-' : '+';
 	buffer[index++] = charVal[0];
 	buffer[index++] = charVal[1];
